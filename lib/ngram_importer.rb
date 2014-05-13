@@ -20,7 +20,8 @@ class NgramImporter
     books.each do |book|
       verses = book.xpath('./chapter/verse')
       puts "Storing ngrams for #{book['name']} (#{verses.length} verses)..."
-      verses.each do |verse|
+      verses.each_with_index do |verse, index|
+        puts "Calculating ngrams for verse #{index+1}"
         words = cleanup(verse.content).downcase.split
         values_of_n.each do |n|
           ngram words, n
