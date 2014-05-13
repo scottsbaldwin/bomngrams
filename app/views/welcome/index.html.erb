@@ -1,0 +1,16 @@
+<div class="container">
+	<div class="page-header">
+		<h2>Book of Mormon n-grams</h2>
+	</div>
+
+	<form role="form" class="form-inline">
+		<div class="form-group">
+			<input type="text" class="form-control input-lg" id="q" name="q" placeholder="and thus we see" value="<%= params[:q] %>"/>
+		</div>
+		<button type="submit" class="btn btn-lg btn-default">Search</button>
+	</form>
+
+	<div class="container" style="<%= params[:q] ? '' : 'display: none;' %>">
+		<h3>Occurrences</h3>
+	</div>
+</div>
