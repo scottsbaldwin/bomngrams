@@ -7,7 +7,6 @@ class NgramImporter
 
   def initialize(file = File.expand_path("bom.xml", Rails.root))
     @file = file
-    puts $redis.keys
   end
 
   def run(values_of_n = (3..5).to_a)
@@ -21,7 +20,7 @@ class NgramImporter
       verses = book.xpath('./chapter/verse')
       puts "Storing ngrams for #{book['name']} (#{verses.length} verses)..."
       verses.each_with_index do |verse, index|
-        puts "Calculating ngrams for verse #{index+1}"
+        puts "Calculating ngrams for verse #{index+1} of #{verses.length}"
         words = cleanup(verse.content).downcase.split
         values_of_n.each do |n|
           ngram words, n
@@ -32,10 +31,6 @@ class NgramImporter
 
   private
 
-  def set_key(num)
-    "#{KEY_NGRAMS}:#{num}"
-  end
-
   def cleanup(text)
     # squish equivalent
     text.gsub!(/\A[[:space:]]+/, '')
@@ -44,6 +39,10 @@ class NgramImporter
     # remove punctuation
     text.gsub!(/[^[[:word:]]\s]/, '')
     text
+  end
+
+  def set_key(num)
+    "#{KEY_NGRAMS}:#{num}"
   end
 
   def ngram(words, size)

@@ -5,12 +5,15 @@
 
 	<form role="form" class="form-inline">
 		<div class="form-group">
-			<input type="text" class="form-control input-lg" id="q" name="q" placeholder="and thus we see" value="<%= params[:q] %>"/>
+			<input type="text" class="form-control input-lg" id="q" name="q" placeholder="and thus we see" value="<%= @query %>"/>
 		</div>
 		<button type="submit" class="btn btn-lg btn-default">Search</button>
 	</form>
 
-	<div class="container" style="<%= params[:q] ? '' : 'display: none;' %>">
+	<div class="container" style="<%= @query ? '' : 'display: none;' %>">
 		<h3>Occurrences</h3>
+		<% @scores.each do |term, score| %>
+			<div><%= term %> appears <%= pluralize(score, 'time')  %></div>
+		<% end %>
 	</div>
 </div>
