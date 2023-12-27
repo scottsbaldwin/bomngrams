@@ -1,0 +1,74 @@
+<div class="container">
+	<div class="page-header">
+		<h2>Book of Mormon n-grams</h2>
+	</div>
+
+    <p>Enter a three to five word phrase to see the number of occurrences for that phrase.</p>
+    <form role="form" class="form-inline">
+		<div class="form-group">
+			<input type="text" class="form-control input-lg" id="q" name="q" placeholder="and thus we see" value="<%= @query %>"/>
+		</div>
+		<button type="submit" class="btn btn-primary">Search</button>
+	</form>
+
+	<div class="container" style="<%= @query ? '' : 'display: none;' %>">
+		<h3>Occurrences</h3>
+		<% @scores.each do |term, score| %>
+			<div><em><%= term %></em> appears <%= pluralize(score, 'time')  %></div>
+		<% end %>
+	</div>
+	
+	<hr/>
+    
+    <div class="container">
+        <div><strong>One word ngrams:</strong> <%= number_with_delimiter(@counts["1"].to_i) %></div>
+        <div><strong>Two word ngrams:</strong> <%= number_with_delimiter(@counts["2"].to_i) %></div>
+        <div><strong>Three word ngrams:</strong> <%= number_with_delimiter(@counts["3"].to_i) %></div>
+        <div><strong>Four word ngrams:</strong> <%= number_with_delimiter(@counts["4"].to_i) %></div>
+        <div><strong>Five word ngrams:</strong> <%= number_with_delimiter(@counts["5"].to_i) %></div>
+        <div><strong>Six word ngrams:</strong> <%= number_with_delimiter(@counts["6"].to_i) %></div>
+	</div>
+	
+	<hr/>
+
+	<ul class="nav nav-tabs" id="myTabs" role="tablist">
+		<% @tops.each_key do |key| %>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="tab<%= key %>" data-bs-toggle="tab" data-bs-target="#content<%= key %>" type="button" role="tab" aria-controls="content<%= key %>" aria-selected="false"><%= key %></button>
+			</li>
+		<% end %>
+	</ul>
+
+	<div class="tab-content" id="myTabContent">
+		<% @tops.each_key do |key| %>
+			<div class="tab-pane fade" id="content<%= key %>" role="tabpanel" aria-labelledby="tab<%= key %>" tabindex="0">
+				<table class="table table-striped">
+					<thead>
+					<tr>
+						<th scope="col">Hits</th>
+						<th scope="col">Phrase</th>
+					</tr>
+					</thead>
+					<tbody>
+						<% @tops[key].each do |result| %>
+						<tr>
+						<th scope="row"><%= number_with_delimiter(result[1].to_i) %></th>
+						<td><%= result[0] %></td>
+						</tr>
+						<% end %>
+					</tbody>
+				</table>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('#myTabs button').click(function (e) {
+		console.log($(this));
+		e.preventDefault();
+		$(this).tab('show');
+	});
+});
+</script>
